@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="resources\Habicht.png" />
+      <Content Include="konsole\resources\icon.png" />
     </ItemGroup>
 
 </Project>
