@@ -1,4 +1,5 @@
 ﻿using Konsole.konsole.control;
+using Konsole.konsole.view;
 using Raylib_CsLo;
 
 namespace Konsole.konsole;
@@ -7,6 +8,7 @@ public class Konsole
 {
     const string Resources = @"../../../konsole/resources";
     public static ConsoleBuffer? Buffer;
+    public static BuffToScreen? BuffScreen;
 
     public static void Main()
     {
@@ -16,12 +18,15 @@ public class Konsole
         Raylib.SetWindowIcon(icon);
         //init control
         Buffer = new ConsoleBuffer(500,100);    //initialize console-buffer
-        
-        
+        BuffScreen = new BuffToScreen();
+
+
         while (!Raylib.WindowShouldClose())
         {
             Raylib.BeginDrawing();
             //begin code
+            BuffScreen.ScreenWidth = Raylib.GetScreenWidth();
+            BuffScreen.ScreenHeight = Raylib.GetScreenHeight();
             
             //end code
             Raylib.ClearBackground(Raylib.DARKGRAY);
