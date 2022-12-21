@@ -1,40 +1,30 @@
 ﻿using System.Numerics;
+using Raylib_CsLo;
 
 namespace Konsole.konsole.control;
 
 public class BuffChar
 {
-    private static float[] _map =
-    {//TODO: get luminance levels of chars
-        ' ',
-        '.',
-        ':',
-        '-',
-        '=',
-        '+',
-        '*',
-        '#',
-        '%',
-        '@'
-    };
-    
     public BuffChar(char c, uint rgba)
     {
-        Rgba = rgba; // ?? new Vector4(1.0f,1.0f,1.0f,1.0f);
+        Rgba = rgba;
         Char = c;
     }
 
     public uint Rgba { get; }
-    public char Char { get; }
+    public char? Char { get; }
 
-    public int BrightnessIndex
+    public float BrightnessIndex
     {
         get
         {
-            var brightness = (0.2126f * R + 0.7152f * G + 0.0722f * B);
-
-
-            return ;
+            var r = Rgba / 0x01000000;
+            var g = (Rgba % 0x01000000) / 0x00010000;
+            var b = ((Rgba % 0x01000000) % 0x00010000) / 0x00000100;
+            
+            var brightness = (0.2126f * r + 0.7152f * g + 0.0722f * b);
+            
+            return MathF.Round(brightness/255,1);
         }
     }
 }

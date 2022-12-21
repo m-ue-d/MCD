@@ -1,4 +1,6 @@
-﻿namespace Konsole.konsole.control;
+﻿using Raylib_CsLo;
+
+namespace Konsole.konsole.control;
 
 /*
  * This class is basically an array of chars with rgba values, that has a little more functionality.
@@ -11,16 +13,19 @@ public class ConsoleBuffer
 
     public int Length => Height * Width;
 
+    private BuffChar[] _line;
+        
     public ConsoleBuffer(int width, int height)
     {
         _buffer = new BuffChar[height*width];
         Width = width;
         Height = height;
+        _line = new BuffChar[Width];
     }
 
     public bool Set(int x, int y, BuffChar c)
     {
-        var pos = (y - (y==0? 0:1)) * Width + x;
+        var pos = y * Width + x;
         
         if (pos>=_buffer.Length || pos<0)
             return false;
@@ -37,7 +42,7 @@ public class ConsoleBuffer
 
     public BuffChar? Get(int x, int y)
     {
-        var pos = (y - (y==0? 0:1)) * Width + x;
+        var pos = y * Width + x;
         
         if (pos>= _buffer.Length || pos<0)
             return null;
@@ -53,18 +58,16 @@ public class ConsoleBuffer
     
     public BuffChar[] GetLine(int y)
     {
-        var o = new BuffChar[Width];
-        
         if (y >= _buffer.Length / Width || y < 0)
-            return o;
+            return _line;
 
-        for (var i = 0; i < o.Length; i++)
+        for (var i = 0; i < _line.Length; i++)
         {
             var pos = y * Width + i;
-            o[i] = _buffer[pos];
+            _line[i] = _buffer[pos];
         }
         
-        return o;
+        return _line;
     }
 
     public void FSet(int x, BuffChar c)
@@ -91,14 +94,28 @@ public class ConsoleBuffer
         {
             var t = _buffer[index];
             if(index<_buffer.Length-1)
-                Console.Write(t.Char + "-");
+                Console.Write("(i:"+index+","+t.Char + ")-");
         }
 
         Console.Write(">\n");
     }
 
-    public void Resize(int width, int height)
+    public void OnUpdate()
     {
-        //TODO: Implement
+        var newW = Raylib.GetScreenWidth() / 10;
+        var newH = Raylib.GetScreenHeight() / 10;
+
+        if (Width != newW || Height != newH)
+        {
+            Console.WriteLine(newW + ", " + newH);
+            Width = newW;
+            Height = newH;
+            Resize();
+        }
+    }
+
+    private void Resize()
+    {
+        _buffer = new BuffChar[Length];
     }
 }

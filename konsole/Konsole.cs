@@ -8,7 +8,7 @@ namespace Konsole.konsole;
 public class Konsole
 {
     const string Resources = @"../../../konsole/resources";
-    public static ConsoleBuffer? Buffer;
+    private static ConsoleBuffer? _buffer;
     public static Font Font_;
 
     public static void Main()
@@ -17,17 +17,17 @@ public class Konsole
         Raylib.InitWindow(1000, 500, "Konsole");
         var icon = Raylib.LoadImageFromTexture(Raylib.LoadTexture($"{Resources}/icon.png"));
         Raylib.SetWindowIcon(icon);
-        Buffer = new ConsoleBuffer(100,50);    //initialize console-buffer
-        InputHandler.Init(Buffer);
+        _buffer = new ConsoleBuffer(Raylib.GetScreenWidth()/10,Raylib.GetScreenHeight()/10);    //initialize console-buffer
+        InputHandler.Init(_buffer);
 
         
         
         
         //TODO: START of temporary
         //fill buffer
-        for (var i = 0; i < Buffer.Length; i++)
+        for (var i = 0; i < _buffer.Length; i++)
         {
-            Buffer.Set(i, new BuffChar(new Random().Next().ToString().ToCharArray()[0],0xFFFFFFFF));
+            _buffer.Set(i, new BuffChar(new Random().Next().ToString().ToCharArray()[0],0xFFFFFFFF));
         }
         //TODO: END of temporary
 
@@ -38,12 +38,14 @@ public class Konsole
         Font_ = Raylib.LoadFontEx($"{Resources}/Monocraft.otf", 96, 0);// set font to a monospaced-font
         while (!Raylib.WindowShouldClose())
         {
+            _buffer.OnUpdate();
+            
             Raylib.BeginDrawing();
             //begin code
-
+            
             InputHandler.Listen();
 
-            BuffToScreen.DrawBuffer(Buffer);
+            BuffToScreen.DrawBuffer(_buffer);
 
             //end code
             Raylib.ClearBackground(Raylib.BLACK);
@@ -53,5 +55,4 @@ public class Konsole
         Raylib.CloseWindow();
         Raylib.UnloadImage(icon);
     }
-
 }
