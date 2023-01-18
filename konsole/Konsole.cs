@@ -1,58 +1,86 @@
 ﻿using System.Numerics;
 using Konsole.konsole.control;
-using Konsole.konsole.view;
 using Raylib_CsLo;
 
 namespace Konsole.konsole;
 
-public class Konsole
+public static class Konsole
 {
     const string Resources = @"../../../konsole/resources";
-    private static ConsoleBuffer? _buffer;
-    public static Font Font_;
+    public static int ScreenW { get; set; } = 1100;
+    public static int ScreenH { get; set; } = 620;
+    
+    public static int CharSize { get; set; } = 5;
+    
+    public static int CanvasW => ScreenW / CharSize;
+    public static int CanvasH => ScreenH / CharSize;
 
-    public static void Main()
-    {
+    public static int YOffset { get; set; } = 0;
+    public static int XOffset { get; set; } = 0;
+
+    public static Character[] Canvas { get; set; } = { };
+
+    public static Font Font { get; set; }
+    
+    public static void Main() {
+        Init();
+        while (!Raylib.WindowShouldClose()) {
+            Update();
+        }
+        Close();
+    }
+    
+    private static void Init() {
         Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
-        Raylib.InitWindow(1000, 500, "Konsole");
+        Raylib.InitWindow(ScreenW, ScreenH, "MCD");
         var icon = Raylib.LoadImageFromTexture(Raylib.LoadTexture($"{Resources}/icon.png"));
         Raylib.SetWindowIcon(icon);
-        _buffer = new ConsoleBuffer(Raylib.GetScreenWidth()/10,Raylib.GetScreenHeight()/10);    //initialize console-buffer
-        InputHandler.Init(_buffer);
+        Raylib.SetTargetFPS(60);
+        Raylib.InitAudioDevice();
 
+        //Font = Raylib.LoadFontEx($"{Resources}/Monocraft.otf", 96, 0);
         
-        
-        
-        //TODO: START of temporary
-        //fill buffer
-        for (var i = 0; i < _buffer.Length; i++)
+        Canvas = new Character[500000];
+        /*for (var i = 0; i < Canvas.Length; i++) {
+            var randColor = Raylib.GetRandomValue(0, 5) switch {
+                0 => Raylib.WHITE,
+                1 => Raylib.RED,
+                2 => Raylib.GREEN,
+                3 => Raylib.BLUE,
+                4 => Raylib.YELLOW,
+                5 => Raylib.PURPLE,
+            };
+            Canvas[i] = new Character('#', randColor);
+        }*/
+    }
+    
+    private static void Update() {
+        ScreenW = Raylib.GetScreenWidth();
+        ScreenH = Raylib.GetScreenHeight();
+        InputHandler.Listen();
+        Raylib.BeginDrawing();
         {
-            _buffer.Set(i, new BuffChar(new Random().Next().ToString().ToCharArray()[0],0xFFFFFFFF));
-        }
-        //TODO: END of temporary
-
-        
-        
-        
-        
-        Font_ = Raylib.LoadFontEx($"{Resources}/Monocraft.otf", 96, 0);// set font to a monospaced-font
-        while (!Raylib.WindowShouldClose())
-        {
-            _buffer.OnUpdate();
-            
-            Raylib.BeginDrawing();
-            //begin code
-            
-            InputHandler.Listen();
-
-            BuffToScreen.DrawBuffer(_buffer);
-
-            //end code
             Raylib.ClearBackground(Raylib.BLACK);
-            Raylib.EndDrawing();
+
+            var x = 0;
+            var y = 0;
+            foreach (var character in Canvas) {
+                var pos = new Vector2(x * CharSize+XOffset, y * CharSize+YOffset);
+                if(character.Value!="\n")
+                    Raylib.DrawTextEx(Font, character.Value, pos, CharSize, 0, character.Color);
+                
+                if (++x > CanvasW || character.Value == "\n") {
+                    y++;
+                    x = 0;
+                }
+            }
         }
-        Raylib.UnloadFont(Font_);
+        Raylib.EndDrawing();
+    }
+    
+    private static void Close() {
+        Console.WriteLine("Disposing engine...");
         Raylib.CloseWindow();
-        Raylib.UnloadImage(icon);
+        Raylib.CloseAudioDevice();
     }
 }
