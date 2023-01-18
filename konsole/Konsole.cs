@@ -7,18 +7,18 @@ namespace Konsole.konsole;
 public static class Konsole
 {
     const string Resources = @"../../../konsole/resources";
-    public static int ScreenW { get; set; } = 1100;
-    public static int ScreenH { get; set; } = 620;
+    public static int ScreenW { get; set; } = 1;
+    public static int ScreenH { get; set; } = 1;
     
     public static int CharSize { get; set; } = 5;
     
     public static int CanvasW => ScreenW / CharSize;
     public static int CanvasH => ScreenH / CharSize;
 
-    public static int YOffset { get; set; } = 0;
-    public static int XOffset { get; set; } = 0;
+    public static int YOffset { get; set; }
+    public static int XOffset { get; set; }
 
-    public static Character[] Canvas { get; set; } = { };
+    public static Character[] Canvas { get; set; } = Array.Empty<Character>();
 
     public static Font Font { get; set; }
     
@@ -32,35 +32,26 @@ public static class Konsole
     
     private static void Init() {
         Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+        Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_TRANSPARENT);
         Raylib.InitWindow(ScreenW, ScreenH, "MCD");
+        Raylib.SetWindowSize(Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 2, Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor()) / 2);
+        Raylib.SetWindowPosition(Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 2 - Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 4, 
+            Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor()) / 2 - Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor()) / 4);
         var icon = Raylib.LoadImageFromTexture(Raylib.LoadTexture($"{Resources}/icon.png"));
         Raylib.SetWindowIcon(icon);
+        Raylib.UnloadImage(icon);
         Raylib.SetTargetFPS(60);
         Raylib.InitAudioDevice();
-
-        //Font = Raylib.LoadFontEx($"{Resources}/Monocraft.otf", 96, 0);
-        
-        Canvas = new Character[500000];
-        /*for (var i = 0; i < Canvas.Length; i++) {
-            var randColor = Raylib.GetRandomValue(0, 5) switch {
-                0 => Raylib.WHITE,
-                1 => Raylib.RED,
-                2 => Raylib.GREEN,
-                3 => Raylib.BLUE,
-                4 => Raylib.YELLOW,
-                5 => Raylib.PURPLE,
-            };
-            Canvas[i] = new Character('#', randColor);
-        }*/
+        Canvas = new Character[100000];
     }
     
     private static void Update() {
         ScreenW = Raylib.GetScreenWidth();
         ScreenH = Raylib.GetScreenHeight();
-        InputHandler.Listen();
+        InputHandler.Hey_Listen();
         Raylib.BeginDrawing();
         {
-            Raylib.ClearBackground(Raylib.BLACK);
+            Raylib.ClearBackground(Raylib.GetColor(0x00000000));
 
             var x = 0;
             var y = 0;

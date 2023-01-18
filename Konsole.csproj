@@ -18,8 +18,4 @@
       <Content Include="konsole\resources\icon.png" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="konsole\view" />
-    </ItemGroup>
-
 </Project>
