@@ -4,7 +4,7 @@ using Raylib_CsLo;
 
 namespace Konsole.konsole;
 
-public static class Konsole
+public static class Mcd
 {
     const string Resources = @"../../../konsole/resources";
     public static int ScreenW { get; set; } = 1;

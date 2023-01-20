@@ -8,7 +8,10 @@ namespace Konsole.konsole.control;
 
 public static class InputHandler
 {
-    public const int CameraMovementSpeed = 2;
+    public static int CameraMovementSpeed { get; set; }= 2;
+    public static ListenAction Listen { get; set; } = () => { };
+
+    public delegate void ListenAction();
 
     public static void Hey_Listen()    //Navi reference xD
     {
@@ -16,17 +19,9 @@ public static class InputHandler
         {
             Util.ToggleFullscreen();
         }
+        Listen();
 
-        if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
-        {
-            var r = new Random();
-            for (var i = 0; i < Konsole.Canvas.Length; i++)
-            {
-                Konsole.Canvas[i] = new Character("#",Raylib.GetColor((uint)r.Next(0,0xFFFFFFF)*0xF));
-            }
-        }
-
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT_SHIFT))
+        /*if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT_SHIFT))
         {
             Konsole.CharSize++;
         }
@@ -51,6 +46,6 @@ public static class InputHandler
         if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT))
         {
             Konsole.XOffset-=CameraMovementSpeed;
-        }
+        }*/
     }
 }
