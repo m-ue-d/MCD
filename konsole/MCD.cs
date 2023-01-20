@@ -74,4 +74,24 @@ public static class Mcd
         Raylib.CloseWindow();
         Raylib.CloseAudioDevice();
     }
+    
+    
+    //buffer operations
+    public static void ClearBuff()
+    {
+        var size = Canvas.Length;
+        Canvas = new Character[size];
+    } 
+    public static void Resize(int size)
+    {
+        var tmp = new Character[size];
+        for(var i=0;i<Canvas.Length;i++)
+        {
+            if(i>=tmp.Length || i>=Canvas.Length)
+                continue;
+            tmp[i] = Canvas[i];
+        }
+        Canvas = tmp;
+    }
+    
 }
