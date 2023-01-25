@@ -18,6 +18,8 @@ public static class Mcd
     public static int YOffset { get; set; }
     public static int XOffset { get; set; }
 
+    public static float Spacing { get; set; } = 1;
+
     public static Character[] Canvas { get; set; } = Array.Empty<Character>();
 
     public static Font Font { get; set; }
@@ -30,9 +32,9 @@ public static class Mcd
         Close();
     }
     
-    private static void Init() {
+    private static void Init()
+    {
         Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
-        Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_TRANSPARENT);
         Raylib.InitWindow(ScreenW, ScreenH, "MCD");
         Raylib.SetWindowSize(Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 2, Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor()) / 2);
         Raylib.SetWindowPosition(Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 2 - Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 4, 
@@ -42,12 +44,14 @@ public static class Mcd
         Raylib.UnloadImage(icon);
         Raylib.SetTargetFPS(60);
         Raylib.InitAudioDevice();
-        Canvas = new Character[100000];
+        //Canvas = new Character[100000];
+        Font = Raylib.GetFontDefault();
     }
     
     private static void Update() {
         ScreenW = Raylib.GetScreenWidth();
         ScreenH = Raylib.GetScreenHeight();
+        Canvas = new Character[CanvasW * CanvasH];
         InputHandler.Hey_Listen();
         Raylib.BeginDrawing();
         {
@@ -56,16 +60,17 @@ public static class Mcd
             var x = 0;
             var y = 0;
             foreach (var character in Canvas) {
-                var pos = new Vector2(x * CharSize+XOffset, y * CharSize+YOffset);
-                if(character.Value!="\n")
-                    Raylib.DrawTextEx(Font, character.Value, pos, CharSize, 0, character.Color);
-                
-                if (++x > CanvasW || character.Value == "\n") {
+                var pos = new Vector2(x, y)* CharSize * Spacing + new Vector2(XOffset, YOffset);
+                if(character.Value!='\n')
+                    Raylib.DrawTextCodepoint(Font, character.Value, pos, CharSize, character.Color);
+
+                if (++x > CanvasW || character.Value == '\n') {
                     y++;
                     x = 0;
                 }
             }
         }
+        
         Raylib.EndDrawing();
     }
     
@@ -93,5 +98,7 @@ public static class Mcd
         }
         Canvas = tmp;
     }
-    
+
+    public static int PosAtPos(int x, int y) => x + y * (CanvasW + 1);
+
 }

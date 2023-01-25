@@ -9,9 +9,7 @@ namespace Konsole.konsole.control;
 public static class InputHandler
 {
     public static int CameraMovementSpeed { get; set; }= 2;
-    public static ListenAction Listen { get; set; } = () => { };
-
-    public delegate void ListenAction();
+    public static Action<Einpacker> Listen { get; set; }
 
     public static void Hey_Listen()    //Navi reference xD
     {
@@ -19,33 +17,37 @@ public static class InputHandler
         {
             Util.ToggleFullscreen();
         }
-        Listen();
+        Listen(new Einpacker
+        {
+            Start = Vector2.Zero,                               // 0, 0
+            Size = new Vector2(Mcd.CanvasW, Mcd.CanvasH)  // 2, 5d k.h 
+        });
 
         /*if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT_SHIFT))
         {
-            Konsole.CharSize++;
+            Mcd.CharSize++;
         }
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT_SHIFT))
         {
-            if(Konsole.CharSize>1)
-                Konsole.CharSize--;
+            if(Mcd.CharSize>1)
+                Mcd.CharSize--;
         }
         
         if (Raylib.IsKeyDown(KeyboardKey.KEY_UP))
         {
-            Konsole.YOffset+=CameraMovementSpeed;
+            Mcd.YOffset+=CameraMovementSpeed;
         }
         if (Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
         {
-            Konsole.YOffset-=CameraMovementSpeed;
+            Mcd.YOffset-=CameraMovementSpeed;
         }
         if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT))
         {
-            Konsole.XOffset+=CameraMovementSpeed;
+            Mcd.XOffset+=CameraMovementSpeed;
         }
         if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT))
         {
-            Konsole.XOffset-=CameraMovementSpeed;
+            Mcd.XOffset-=CameraMovementSpeed;
         }*/
     }
 }
