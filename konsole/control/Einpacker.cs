@@ -24,7 +24,6 @@ public class Einpacker
             for (int j = (int) Start.Y; j < Size.X; j++)
             {
                 Mcd.Canvas[Mcd.PosAtPos(j, i)] = new Character(ch,co);
-                //Console.WriteLine($"{j}, {i}");
             }
         }
     }

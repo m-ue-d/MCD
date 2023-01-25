@@ -51,7 +51,8 @@ public static class Mcd
     private static void Update() {
         ScreenW = Raylib.GetScreenWidth();
         ScreenH = Raylib.GetScreenHeight();
-        Canvas = new Character[CanvasW * CanvasH];
+        Resize(CanvasW * CanvasH);
+        Console.WriteLine(Canvas.Length);
         InputHandler.Hey_Listen();
         Raylib.BeginDrawing();
         {
@@ -65,7 +66,7 @@ public static class Mcd
                     Raylib.DrawTextCodepoint(Font, character.Value, pos, CharSize, character.Color);
 
                 if (++x > CanvasW || character.Value == '\n') {
-                    y++;
+                    ++y;
                     x = 0;
                 }
             }
@@ -89,6 +90,9 @@ public static class Mcd
     } 
     public static void Resize(int size)
     {
+        if(Canvas.Length==size)
+            return;
+        
         var tmp = new Character[size];
         for(var i=0;i<Canvas.Length;i++)
         {
@@ -99,6 +103,9 @@ public static class Mcd
         Canvas = tmp;
     }
 
-    public static int PosAtPos(int x, int y) => x + y * (CanvasW + 1);
-
+    public static int PosAtPos(int x, int y)
+    {
+        var t = (x + y * (CanvasW + 1));
+        return t < Canvas.Length ? t : Canvas.Length - 1;
+    }
 }
