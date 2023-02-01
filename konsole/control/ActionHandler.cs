@@ -4,8 +4,8 @@ namespace Konsole.konsole.control;
 
 public static class ActionHandler
 {
-    public static int CameraMovementSpeed { get; set; }= 2;
-    public static int ZoomSpeed { get; set; } = 2;
+    public static float CameraMovementSpeed { get; set; }= 1;
+    public static float ZoomSpeed { get; set; } = 1;
     public static Action<Bregion> Listen { get; set; } = (x) => { Console.WriteLine("Example-Update-Function"); };
 
     public static void Hey_Listen()    //Navi reference xD

@@ -49,16 +49,14 @@ public class Bregion
         }
     }
 
-    /** Fills the region with an animation (format must be gif)
-     *
-     * To load the Image, use: var current = Raylib.LoadImageAnim("path...", &animFrames);
-     */
-    public void FillAnimation(Image animImage, int animFrames, int frameDelay)
+    /** Fills the region with an animation (format must be gif)*/
+    public void FillAnimation(Image animImage, int frameDelay)
     {
         unsafe
         {
             
-            //Raylib.ImageResize(); //TODO: Ob das mit gifs geht?
+
+            //Raylib.ImageResize(); //TODO: Ob das gescheit mit gifs geht?
         }
     }
 

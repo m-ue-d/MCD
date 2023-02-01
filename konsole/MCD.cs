@@ -22,9 +22,9 @@ public static class Mcd
     public static int CanvasH => ScreenH / CharSize;    //Amount of chars that fit into the screen-height
     #endregion
 
-    public static int CameraY { get; set; } = 0;
-    public static int CameraX { get; set; } = 0;
-    public static int Zoom { get; set; } = 0;
+    public static float CameraY { get; set; } = 0;
+    public static float CameraX { get; set; } = 0;
+    public static float Zoom { get; set; } = 0;
 
     public static float Spacing { get; set; } = 1;
 
