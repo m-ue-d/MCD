@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Konsole.konsole.utility;
 using Raylib_CsLo;
 
 namespace Konsole.konsole.control;
@@ -30,6 +31,35 @@ public class Bregion
         for (var y = (int) Start.Y; y < Start.Y + Size.Y; y++)
             for (var x = (int) Start.X; x < Start.X + Size.X; x++)
                 Mcd.Canvas[Mcd.PosAtPos(x, y)] = new Character(ch, co);
+    }
+
+    /** Fills the region with an image (format must be png)*/
+    public void FillImage(Image image)
+    {
+        unsafe //resize image to fit inside the region
+        {
+            var current = Raylib.ImageCopy(image);
+            Raylib.ImageResize(&current, (int)(Start.X+Size.X), (int)(Start.Y+Size.Y));   //TODO: change Vector2<float> to Vector2<int>
+            for (var y = (int) Start.Y; y < Start.Y + Size.Y; y++)
+                for (var x = (int) Start.X; x < Start.X + Size.X; x++)
+                {
+                    var color = Raylib.GetImageColor(current, x, y);
+                    Mcd.Canvas[Mcd.PosAtPos(x, y)] = new Character(Util.GetCharByBrightness(color.GetBrightness()), color);
+                }
+        }
+    }
+
+    /** Fills the region with an animation (format must be gif)
+     *
+     * To load the Image, use: var current = Raylib.LoadImageAnim("path...", &animFrames);
+     */
+    public void FillAnimation(Image animImage, int animFrames, int frameDelay)
+    {
+        unsafe
+        {
+            
+            //Raylib.ImageResize(); //TODO: Ob das mit gifs geht?
+        }
     }
 
     /** Sets a character at the desired position*/

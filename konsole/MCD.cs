@@ -21,10 +21,10 @@ public static class Mcd
     public static int CanvasW => ScreenW / CharSize;    //Amount of chars that fit into the screen-width
     public static int CanvasH => ScreenH / CharSize;    //Amount of chars that fit into the screen-height
     #endregion
-    
-    public static int CameraY { get; set; }
-    public static int CameraX { get; set; }
-    public static int Zoom { get; set; }
+
+    public static int CameraY { get; set; } = 0;
+    public static int CameraX { get; set; } = 0;
+    public static int Zoom { get; set; } = 0;
 
     public static float Spacing { get; set; } = 1;
 
@@ -48,9 +48,9 @@ public static class Mcd
         Raylib.SetWindowSize(Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 2, Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor()) / 2);
         Raylib.SetWindowPosition(Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 2 - Raylib.GetMonitorWidth(Raylib.GetCurrentMonitor()) / 4, 
             Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor()) / 2 - Raylib.GetMonitorHeight(Raylib.GetCurrentMonitor()) / 4);
-        var icon = Raylib.LoadImageFromTexture(Raylib.LoadTexture($"{Resources}/icon.png"));    //TODO: Change Resources Location to get the File form the ddl
-        Raylib.SetWindowIcon(icon);
-        Raylib.UnloadImage(icon);
+        //var icon = Raylib.LoadImageFromTexture(Raylib.LoadTexture($"{Resources}/icon.png"));    //TODO: Change Resources Location to get the File form the ddl
+        //Raylib.SetWindowIcon(icon);
+        //Raylib.UnloadImage(icon);
         Raylib.SetTargetFPS(60);
         Raylib.InitAudioDevice();
         Font = Raylib.GetFontDefault();
@@ -96,7 +96,7 @@ public static class Mcd
     } 
     public static void Resize(int size)
     {
-        Raylib.SetWindowSize(CanvasW*CharSize, CanvasH*CharSize);   //TODO: Try using ScreenW and ScreenH
+        Raylib.SetWindowSize(CanvasW*CharSize, CanvasH*CharSize);
         if(Canvas.Length==size)
             return;
         
