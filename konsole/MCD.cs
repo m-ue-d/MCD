@@ -35,6 +35,7 @@ public static class Mcd
 
     public static void Main() {
         Init();
+        ActionHandler.Preload();
         while (!Raylib.WindowShouldClose()) {
             Update();
         }

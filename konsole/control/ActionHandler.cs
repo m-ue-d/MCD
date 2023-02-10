@@ -7,6 +7,7 @@ public static class ActionHandler
     public static float CameraMovementSpeed { get; set; }= 1;
     public static float ZoomSpeed { get; set; } = 1;
     public static Action<Bregion> Listen { get; set; } = (x) => { Console.WriteLine("Example-Update-Function"); };
+    public static Action Preload { get; set; }
 
     public static void Hey_Listen()    //Navi reference xD
     {
